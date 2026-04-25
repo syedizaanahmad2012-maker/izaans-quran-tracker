@@ -1,0 +1,3073 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hifdh Tracker</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --red: #ff3b30;
+      --gold: #f5a623;
+      --red-dim: rgba(255, 59, 48, 0.15);
+      --red-glow: rgba(255, 59, 48, 0.4);
+      --gold-dim: rgba(245, 166, 35, 0.15);
+      --gold-glow: rgba(245, 166, 35, 0.4);
+      --glass: rgba(14, 6, 6, 0.6);
+      --glass-hover: rgba(20, 8, 8, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.07);
+      --glass-hi: rgba(255, 255, 255, 0.11);
+      --surf: rgba(255, 255, 255, 0.04);
+      --surf2: rgba(255, 255, 255, 0.07);
+      --text: rgba(255, 255, 255, 0.93);
+      --text-dim: rgba(255, 255, 255, 0.48);
+      --text-muted: rgba(255, 255, 255, 0.22);
+      --done-bg: rgba(255, 59, 48, 0.09);
+      --done-border: rgba(255, 59, 48, 0.26);
+      --done-text: rgba(255, 150, 140, 0.95);
+      --next-bg: rgba(245, 166, 35, 0.09);
+      --next-border: rgba(245, 166, 35, 0.28);
+      --next-text: rgba(255, 220, 100, 0.9);
+      --both-bg: rgba(200, 80, 30, 0.1);
+      --both-border: rgba(220, 110, 50, 0.3);
+      --font: 'Syne', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+      --arabic: 'Noto Naskh Arabic', serif;
+      --radius: 20px;
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      background: #080303;
+      color: var(--text);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased
+    }
+
+    /* ── BG ── */
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      will-change: transform
+    }
+
+    .o1 {
+      width: 680px;
+      height: 460px;
+      background: radial-gradient(ellipse, rgba(255, 59, 48, 0.22) 0%, transparent 68%)
+    }
+
+    .o2 {
+      width: 460px;
+      height: 560px;
+      background: radial-gradient(ellipse, rgba(180, 20, 10, 0.16) 0%, transparent 68%)
+    }
+
+    .o3 {
+      width: 400px;
+      height: 320px;
+      background: radial-gradient(ellipse, rgba(255, 90, 35, 0.13) 0%, transparent 68%)
+    }
+
+    .o4 {
+      width: 280px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(255, 59, 48, 0.1) 0%, transparent 68%)
+    }
+
+    .o5 {
+      width: 240px;
+      height: 260px;
+      background: radial-gradient(ellipse, rgba(200, 30, 10, 0.12) 0%, transparent 68%)
+    }
+
+    .o6 {
+      width: 380px;
+      height: 260px;
+      background: radial-gradient(ellipse, rgba(255, 120, 50, 0.1) 0%, transparent 68%)
+    }
+
+    .o7 {
+      width: 180px;
+      height: 280px;
+      background: radial-gradient(ellipse, rgba(220, 40, 20, 0.1) 0%, transparent 68%)
+    }
+
+    .o8 {
+      width: 520px;
+      height: 280px;
+      background: radial-gradient(ellipse, rgba(140, 12, 4, 0.09) 0%, transparent 68%)
+    }
+
+    @keyframes ob1 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      30% {
+        transform: translate(90px, -60px) scale(1.12)
+      }
+
+      65% {
+        transform: translate(-55px, 90px) scale(0.91)
+      }
+    }
+
+    @keyframes ob2 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      38% {
+        transform: translate(-75px, 65px) scale(1.1)
+      }
+
+      72% {
+        transform: translate(65px, -50px) scale(0.94)
+      }
+    }
+
+    @keyframes ob3 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      28% {
+        transform: translate(70px, -80px) scale(1.08)
+      }
+
+      62% {
+        transform: translate(-90px, 50px) scale(0.96)
+      }
+    }
+
+    @keyframes ob4 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      45% {
+        transform: translate(-60px, 75px) scale(1.07)
+      }
+
+      80% {
+        transform: translate(80px, -35px) scale(0.95)
+      }
+    }
+
+    @keyframes ob5 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      35% {
+        transform: translate(55px, 70px) scale(1.09)
+      }
+
+      70% {
+        transform: translate(-70px, -55px) scale(0.94)
+      }
+    }
+
+    @keyframes ob6 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      42% {
+        transform: translate(-85px, -60px) scale(1.06)
+      }
+
+      75% {
+        transform: translate(60px, 80px) scale(0.97)
+      }
+    }
+
+    @keyframes ob7 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      50% {
+        transform: translate(65px, -80px) scale(1.1)
+      }
+    }
+    }
+
+    @keyframes ob8 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      33% {
+        transform: translate(-70px, 55px) scale(1.05)
+      }
+
+      68% {
+        transform: translate(90px, -45px) scale(0.93)
+      }
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.03;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px
+    }
+
+    /* ── APP ── */
+    #app {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column
+    }
+
+    /* ── TOPBAR ── */
+    #topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px 0;
+      gap: 16px;
+      flex-wrap: wrap
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      gap: 2px
+    }
+
+    .logo-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1
+    }
+
+    .logo-accent {
+      color: var(--red)
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .file-status {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      white-space: nowrap
+    }
+
+    .dot-saved {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      margin-right: 4px;
+      box-shadow: 0 0 6px rgba(74, 222, 128, 0.5)
+    }
+
+    .dot-unsaved {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      margin-right: 4px;
+      animation: bpulse 1.5s ease infinite
+    }
+
+    @keyframes bpulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.4
+      }
+    }
+
+    /* ── TABS (full width, v1 style) ── */
+    #tabs {
+      display: flex;
+      gap: 4px;
+      padding: 16px 24px 0;
+      border-bottom: 0.5px solid var(--glass-border);
+      margin-top: 12px
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 12px 12px 0 0;
+      border: 0.5px solid transparent;
+      border-bottom: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: transparent;
+      transition: all 0.2s;
+      letter-spacing: 0.01em;
+      white-space: nowrap
+    }
+
+    .tab:hover {
+      color: var(--text-dim);
+      background: var(--surf)
+    }
+
+    .tab.active {
+      color: var(--text);
+      background: var(--glass);
+      border-color: var(--glass-border);
+      border-bottom-color: transparent;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px)
+    }
+
+    /* ── CONTENT ── */
+    #content {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box
+    }
+
+    .section {
+      display: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.28s ease, transform 0.28s ease
+    }
+
+    .section.active {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      animation: secIn 0.3s cubic-bezier(0.34, 1.1, 0.64, 1) both
+    }
+
+    @keyframes secIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* ── GLASS INPUTS / SELECTS ── */
+    .ginput {
+      padding: 9px 14px;
+      font-size: 13px;
+      font-family: var(--font);
+      background: var(--glass);
+      border: 0.5px solid var(--glass-border);
+      border-radius: 14px;
+      color: var(--text);
+      outline: none;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: border-color 0.2s
+    }
+
+    .ginput::placeholder {
+      color: var(--text-muted)
+    }
+
+    .ginput:focus {
+      border-color: rgba(255, 59, 48, 0.4)
+    }
+
+    .gselect-wrap {
+      position: relative
+    }
+
+    .gselect-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-family: var(--font);
+      background: var(--glass);
+      border: 0.5px solid var(--glass-border);
+      border-radius: 14px;
+      color: var(--text);
+      cursor: pointer;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: border-color 0.2s;
+      min-width: 130px;
+      user-select: none
+    }
+
+    .gselect-btn svg {
+      width: 12px;
+      height: 12px;
+      opacity: 0.5;
+      transition: transform 0.2s;
+      flex-shrink: 0
+    }
+
+    .gselect-btn.open svg {
+      transform: rotate(180deg)
+    }
+
+    .gselect-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgba(12, 4, 4, 0.92);
+      border: 0.5px solid var(--glass-border);
+      border-radius: 14px;
+      overflow: hidden;
+      backdrop-filter: blur(40px) saturate(1.6);
+      -webkit-backdrop-filter: blur(40px) saturate(1.6);
+      transform-origin: top center;
+      transform: scaleY(0) translateY(-4px);
+      opacity: 0;
+      transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.15s;
+      pointer-events: none;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06)
+    }
+
+    .gselect-dropdown.open {
+      transform: scaleY(1) translateY(0);
+      opacity: 1;
+      pointer-events: all
+    }
+
+    .gselect-opt {
+      padding: 10px 14px;
+      font-size: 13px;
+      font-family: var(--font);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s
+    }
+
+    .gselect-opt:hover {
+      background: var(--surf2);
+      color: var(--text)
+    }
+
+    .gselect-opt.selected {
+      color: var(--text);
+      background: var(--surf)
+    }
+
+    .gselect-opt+.gselect-opt {
+      border-top: 0.5px solid rgba(255, 255, 255, 0.04)
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: 0.5px solid var(--glass-border);
+      background: var(--surf);
+      color: var(--text-dim);
+      font-size: 12px;
+      font-family: var(--mono);
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap
+    }
+
+    .btn:hover {
+      background: var(--surf2);
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.12)
+    }
+
+    .btn:active {
+      transform: scale(0.97)
+    }
+
+    .btn.primary {
+      border-color: var(--done-border);
+      background: rgba(255, 59, 48, 0.22);
+      color: var(--text);
+      font-weight: 500
+    }
+
+    .btn.primary:hover {
+      background: rgba(255, 59, 48, 0.32)
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 0.5px;
+      background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+      margin: 1rem 0
+    }
+
+    /* ── PILL ── */
+    .gpill {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      border: 0.5px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text-dim);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      white-space: nowrap
+    }
+
+    .gpill b {
+      color: var(--text);
+      font-weight: 500;
+      margin-right: 3px
+    }
+
+    .gpill.red {
+      border-color: var(--done-border);
+      background: var(--done-bg);
+      color: rgba(255, 140, 134, 0.85)
+    }
+
+    .gpill.red b {
+      color: #ff8880
+    }
+
+    .gpill.yellow {
+      border-color: var(--next-border);
+      background: var(--next-bg);
+      color: var(--next-text)
+    }
+
+    /* ── PAGE CARDS ── */
+    .pages-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    .pills-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      align-items: center
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px
+    }
+
+    /* breathing idle - 2px only, no movement */
+    @keyframes breathe {
+
+      0%,
+      100% {
+        transform: translateY(var(--hover-lift, 0px))
+      }
+
+      50% {
+        transform: translateY(calc(var(--hover-lift, 0px) - 2px))
+      }
+    }
+
+    .pcard {
+      position: relative;
+      border-radius: var(--radius);
+      border: 0.5px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      padding: 14px 16px 13px;
+      /* color transitions */
+      transition:
+        border-color 0.45s ease,
+        background 0.45s ease,
+        box-shadow 0.45s ease,
+        transform 0.18s ease;
+      overflow: hidden;
+      user-select: none;
+      /* breathing */
+      animation: breathe var(--bd, 7s) ease-in-out var(--bdelay, 0s) infinite;
+      will-change: transform;
+    }
+
+    .pcard::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.055) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 1
+    }
+
+    .pcard::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-hi), transparent);
+      pointer-events: none;
+      z-index: 2;
+      transition: background 0.45s ease
+    }
+
+    .pcard:hover {
+      --hover-lift: -4px;
+      border-color: rgba(255, 255, 255, 0.13);
+      background: var(--glass-hover);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28)
+    }
+
+    .pcard:active {
+      transform: translateY(2px) scale(0.98)
+    }
+
+    /* state: red dot only */
+    .pcard.state-red {
+      border-color: var(--done-border);
+      background: var(--done-bg);
+      box-shadow: 0 0 20px rgba(255, 59, 48, 0.08)
+    }
+
+    .pcard.state-red::after {
+      background: linear-gradient(90deg, transparent, rgba(255, 59, 48, 0.28), transparent)
+    }
+
+    .pcard.state-red .pnum {
+      color: var(--done-text)
+    }
+
+    .pcard.state-red .pverses {
+      color: rgba(255, 160, 155, 0.7)
+    }
+
+    .pcard.state-red .pln {
+      background: rgba(255, 59, 48, 0.08);
+      border-color: rgba(255, 59, 48, 0.14);
+      color: rgba(255, 140, 134, 0.6)
+    }
+
+    /* state: gold dot only */
+    .pcard.state-gold {
+      border-color: var(--next-border);
+      background: var(--next-bg);
+      box-shadow: 0 0 20px rgba(245, 166, 35, 0.08)
+    }
+
+    .pcard.state-gold::after {
+      background: linear-gradient(90deg, transparent, rgba(245, 166, 35, 0.28), transparent)
+    }
+
+    .pcard.state-gold .pnum {
+      color: var(--next-text)
+    }
+
+    .pcard.state-gold .pverses {
+      color: rgba(245, 200, 120, 0.7)
+    }
+
+    .pcard.state-gold .pln {
+      background: rgba(245, 166, 35, 0.08);
+      border-color: rgba(245, 166, 35, 0.18);
+      color: rgba(245, 200, 80, 0.65)
+    }
+
+    /* state: both — gold left, red right gradient */
+    .pcard.state-both {
+      border-color: rgba(230, 130, 55, 0.42);
+      background: linear-gradient(135deg, rgba(245, 166, 35, 0.13) 0%, rgba(255, 59, 48, 0.13) 100%);
+      box-shadow: 0 0 28px rgba(220, 100, 40, 0.14)
+    }
+
+    .pcard.state-both::after {
+      background: linear-gradient(90deg, rgba(245, 166, 35, 0.45) 0%, rgba(255, 59, 48, 0.45) 100%)
+    }
+
+    .pcard.state-both .pnum {
+      color: rgba(255, 210, 150, 0.95)
+    }
+
+    .pcard.state-both .pverses {
+      color: rgba(245, 185, 120, 0.7)
+    }
+
+    /* card internals */
+    .pcard-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 7px;
+      position: relative;
+      z-index: 3
+    }
+
+    .pnum {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1;
+      transition: color 0.45s
+    }
+
+    .pdots {
+      display: flex;
+      gap: 7px;
+      align-items: center
+    }
+
+    /* dots */
+    .dot-gold,
+    .dot-red {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      z-index: 5;
+      border: 1.5px solid;
+      flex-shrink: 0;
+      transition: background 0.22s, box-shadow 0.22s, border-color 0.22s, transform 0.15s
+    }
+
+    .dot-gold {
+      border-color: rgba(245, 166, 35, 0.4);
+      background: transparent
+    }
+
+    .dot-gold:hover {
+      transform: scale(1.15);
+      border-color: rgba(245, 166, 35, 0.8)
+    }
+
+    .dot-gold.on {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 8px var(--gold-glow)
+    }
+
+    .dot-red {
+      border-color: rgba(255, 59, 48, 0.4);
+      background: transparent
+    }
+
+    .dot-red:hover {
+      transform: scale(1.15);
+      border-color: rgba(255, 59, 48, 0.8)
+    }
+
+    .dot-red.on {
+      background: var(--red);
+      border-color: var(--red);
+      box-shadow: 0 0 8px var(--red-glow)
+    }
+
+    .pverses {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      line-height: 1.5;
+      position: relative;
+      z-index: 3;
+      transition: color 0.45s
+    }
+
+    .pcard-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 3
+    }
+
+    .pln {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      background: var(--surf);
+      border: 0.5px solid rgba(255, 255, 255, 0.06);
+      border-radius: 7px;
+      padding: 3px 8px;
+      line-height: 1.4;
+      transition: all 0.45s
+    }
+
+    .pedit-btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      background: var(--surf);
+      border: 0.5px solid rgba(255, 255, 255, 0.06);
+      border-radius: 7px;
+      padding: 3px 8px;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      z-index: 5
+    }
+
+    .pedit-btn:hover {
+      color: var(--text);
+      background: var(--surf2);
+      border-color: rgba(255, 255, 255, 0.12)
+    }
+
+    .edit-hint {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: .75rem;
+      letter-spacing: .04em
+    }
+
+    .reset-bar {
+      margin-top: 1.25rem;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      min-height: 20px;
+      letter-spacing: .04em;
+      transition: color .3s
+    }
+
+    .reset-bar.all-done {
+      color: var(--red);
+      text-shadow: 0 0 10px var(--red-glow)
+    }
+
+    .empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 12px
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+    }
+
+    .pcard.anim-in {
+      animation: cardIn 0.3s cubic-bezier(0.34, 1.2, 0.64, 1) both, breathe var(--bd, 7s) ease-in-out var(--bdel, 0s) infinite
+    }
+
+    /* ── MODAL ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px
+    }
+
+    .modal-backdrop.open {
+      display: flex
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 440px;
+      border-radius: 24px;
+      border: 0.5px solid var(--glass-border);
+      background: rgba(12, 4, 4, 0.92);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      padding: 24px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07)
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text)
+    }
+
+    .modal-field {
+      margin-bottom: 12px
+    }
+
+    .modal-label {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 5px
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-family: var(--mono);
+      background: var(--surf);
+      border: 0.5px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text);
+      outline: none
+    }
+
+    .modal-input:focus {
+      border-color: rgba(255, 59, 48, 0.4)
+    }
+
+    .modal-input option {
+      background: #0e0505
+    }
+
+    .modal-row {
+      display: flex;
+      gap: 8px
+    }
+
+    .modal-row .modal-field {
+      flex: 1
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px
+    }
+
+    .modal-save {
+      flex: 1;
+      padding: 9px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255, 59, 48, 0.25);
+      color: var(--text);
+      font-size: 12px;
+      font-family: var(--mono);
+      cursor: pointer;
+      transition: background .15s
+    }
+
+    .modal-save:hover {
+      background: rgba(255, 59, 48, 0.4)
+    }
+
+    .modal-cancel {
+      padding: 9px 14px;
+      border-radius: 12px;
+      border: 0.5px solid var(--glass-border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-family: var(--mono);
+      cursor: pointer
+    }
+
+    .modal-delete {
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 0.5px solid rgba(255, 59, 48, 0.2);
+      background: rgba(255, 59, 48, 0.08);
+      color: rgba(255, 120, 110, 0.85);
+      font-size: 12px;
+      font-family: var(--mono);
+      cursor: pointer
+    }
+
+    .modal-note {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--red);
+      margin-top: 8px;
+      display: none
+    }
+
+    /* ── FAWATIH ── */
+    .fawatih-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      align-items: center
+    }
+
+    .fawatih-progress {
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--text-muted)
+    }
+
+    .card-deck {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 300px;
+      perspective: 1000px
+    }
+
+    .flashcard {
+      width: min(540px, 90vw);
+      height: min(310px, 40vw);
+      min-height: 220px;
+      position: relative;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)
+    }
+
+    .flashcard.flipped {
+      transform: rotateY(180deg)
+    }
+
+    .fc-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      border: 0.5px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(28px) saturate(1.5);
+      -webkit-backdrop-filter: blur(28px) saturate(1.5);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden
+    }
+
+    .fc-face::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.055) 0%, transparent 55%);
+      pointer-events: none
+    }
+
+    .fc-face::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-hi), transparent)
+    }
+
+    .fc-back {
+      transform: rotateY(180deg)
+    }
+
+    .fc-num {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1
+    }
+
+    .fc-num .accent {
+      color: var(--red)
+    }
+
+    .fc-surah-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      text-align: center
+    }
+
+    .fc-arabic {
+      font-family: var(--arabic);
+      font-size: 18px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      text-align: center;
+      direction: rtl
+    }
+
+    .fc-opening {
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+      max-width: 260px
+    }
+
+    .fc-hint {
+      position: absolute;
+      bottom: 14px;
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      letter-spacing: .06em
+    }
+
+    .fc-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 1.5rem;
+      flex-wrap: wrap
+    }
+
+    .fc-score {
+      margin-top: 1rem;
+      text-align: center
+    }
+
+    .fc-score-inner {
+      display: inline-flex;
+      gap: 12px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 0.5px solid var(--glass-border);
+      background: var(--glass)
+    }
+
+    .score-known {
+      font-size: 12px;
+      font-family: var(--mono);
+      color: #4ade80
+    }
+
+    .score-unknown {
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--red)
+    }
+
+    /* ── PLAN ── */
+    .plan-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 16px;
+      height: calc(100dvh - 175px)
+    }
+
+    .plan-grid>.plan-box:nth-child(1) {
+      grid-row: 1 / 3
+    }
+
+    .plan-grid>.plan-box:nth-child(3) {
+      grid-column: 2;
+      grid-row: 2
+    }
+
+    @media(max-width:700px) {
+      .plan-grid {
+        grid-template-columns: 1fr
+      }
+
+      .plan-grid>.plan-box:nth-child(1) {
+        grid-row: auto
+      }
+
+      .plan-grid>.plan-box:nth-child(3) {
+        grid-column: auto;
+        grid-row: auto
+      }
+    }
+
+    .plan-box {
+      border-radius: var(--radius);
+      border: 0.5px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column
+    }
+
+    .plan-box-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .plan-box-title span {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-weight: 400
+    }
+
+    .ayah-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 200px;
+      overflow-y: auto
+    }
+
+    .ayah-list::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .ayah-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px
+    }
+
+    .ayah-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      background: var(--surf);
+      cursor: default;
+      transition: background 0.15s
+    }
+
+    .ayah-item:hover {
+      background: var(--surf2)
+    }
+
+    .ayah-item.shift-selected {
+      background: rgba(255,59,48,0.1);
+      border: 0.5px solid rgba(255,59,48,0.2)
+    }
+
+    .ayah-ref {
+      font-family: var(--mono);
+      color: var(--text-dim);
+      flex: 1
+    }
+
+    .ayah-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-left: 10px;
+      cursor: pointer;
+      border: 1.5px solid;
+      transition: transform 0.15s, box-shadow 0.15s
+    }
+
+    .ayah-dot:hover { transform: scale(1.25) }
+
+    .ayah-dot-qiraat {
+      background: var(--red);
+      border-color: var(--red);
+      box-shadow: 0 0 6px rgba(255,59,48,0.5)
+    }
+
+    .ayah-dot-memory {
+      background: transparent;
+      border-color: rgba(255,255,255,0.35)
+    }
+
+    /* Ayah edit modal */
+    .ayah-edit-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px
+    }
+
+    .ayah-edit-modal-backdrop.open { display: flex }
+
+    .ayah-edit-modal {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 24px;
+      border: 0.5px solid var(--glass-border);
+      background: rgba(12,4,4,0.95);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      padding: 22px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.07)
+    }
+
+    .aem-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 14px
+    }
+
+    .aem-ref-display {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-dim);
+      background: var(--surf);
+      border: 0.5px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin-bottom: 12px
+    }
+
+    .aem-type-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px
+    }
+
+    .aem-type-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: 10px;
+      border: 0.5px solid var(--glass-border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-family: var(--mono);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center
+    }
+
+    .aem-type-btn:hover { background: var(--surf); color: var(--text-dim) }
+
+    .aem-type-btn.active-qiraat {
+      border-color: var(--done-border);
+      background: var(--done-bg);
+      color: var(--done-text)
+    }
+
+    .aem-type-btn.active-memory {
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.06);
+      color: var(--text)
+    }
+
+    .aem-text-field {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-family: var(--mono);
+      background: var(--surf);
+      border: 0.5px solid var(--glass-border);
+      border-radius: 10px;
+      color: var(--text);
+      outline: none;
+      margin-bottom: 14px
+    }
+
+    .aem-text-field:focus { border-color: rgba(255,59,48,0.4) }
+
+    .aem-actions {
+      display: flex;
+      gap: 8px
+    }
+
+    /* Add ayah modal (verse input) */
+    .add-ayah-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px
+    }
+
+    .add-ayah-modal-backdrop.open { display: flex }
+
+    .add-ayah-modal {
+      width: 100%;
+      max-width: 420px;
+      border-radius: 24px;
+      border: 0.5px solid var(--glass-border);
+      background: rgba(12,4,4,0.95);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      padding: 22px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.07)
+    }
+
+    .aam-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px
+    }
+
+    .aam-hint {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      line-height: 1.6
+    }
+
+    .aam-input {
+      width: 100%;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-family: var(--mono);
+      background: var(--surf);
+      border: 0.5px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text);
+      outline: none;
+      margin-bottom: 10px
+    }
+
+    .aam-input:focus { border-color: rgba(255,59,48,0.4) }
+
+    .aam-error {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--red);
+      min-height: 16px;
+      margin-bottom: 10px
+    }
+
+    .aam-loading {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      min-height: 16px;
+      margin-bottom: 10px
+    }
+
+    .aam-actions { display: flex; gap: 8px }
+
+    .add-ayah-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+      align-items: center
+    }
+
+    .add-ayah-row .ginput {
+      flex: 1;
+      font-size: 12px;
+      padding: 7px 12px
+    }
+
+    .plan-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      overflow-y: auto
+    }
+
+    .plan-steps::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .plan-steps::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px
+    }
+
+    .plan-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      background: var(--surf)
+    }
+
+    .step-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      min-width: 18px
+    }
+
+    .step-text {
+      color: var(--text-dim);
+      flex: 1
+    }
+
+    .plan-step.next-mem {
+      background: var(--done-bg);
+      border: 0.5px solid var(--done-border)
+    }
+
+    .plan-step.next-mem .step-text {
+      color: var(--done-text)
+    }
+
+    .plan-step.next-mem .step-num {
+      color: rgba(255, 140, 134, 0.6)
+    }
+
+    .memorize-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    /* roadmap edit controls */
+    .step-del {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 5px;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.15s, color 0.15s
+    }
+
+    .plan-step:hover .step-del {
+      opacity: 1
+    }
+
+    .step-del:hover {
+      color: var(--red)
+    }
+
+    .step-next-badge {
+      color: rgba(255, 140, 134, 0.7);
+      font-size: 10px;
+      font-family: var(--mono);
+      flex-shrink: 0
+    }
+
+    .step-text.editing {
+      outline: none;
+      border-bottom: 1px solid rgba(255, 59, 48, 0.5);
+      color: var(--text);
+      caret-color: var(--red)
+    }
+
+    .plan-step[draggable="true"] {
+      cursor: grab
+    }
+
+    .plan-step[draggable="true"]:active {
+      cursor: grabbing
+    }
+
+    /* ayah delete - removed, handled via modal */
+
+    .mem-phase {
+      border-radius: 12px;
+      border: 0.5px solid var(--glass-border);
+      background: var(--surf);
+      padding: 10px 12px
+    }
+
+    .mem-phase-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+      font-family: var(--mono);
+      letter-spacing: .04em;
+      text-transform: uppercase
+    }
+
+    .mem-step {
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 2px 0;
+      line-height: 1.5
+    }
+
+    .mem-step b {
+      color: var(--text-dim);
+      font-weight: 500
+    }
+
+    /* ── REVIEW ── */
+    .review-note {
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 0.5px solid var(--glass-border);
+      background: var(--surf);
+      line-height: 1.7;
+      margin-bottom: 12px
+    }
+
+    .sec-label {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px
+    }
+
+    .sec-label {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      margin-bottom: 10px
+    }
+
+    /* ── FILE ── */
+    .file-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 480px
+    }
+
+    .file-status-box {
+      border-radius: 16px;
+      border: 0.5px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 16px 20px
+    }
+
+    .fs-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 6px
+    }
+
+    .fs-val {
+      font-size: 14px;
+      font-family: var(--mono);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .fbtn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 0.5px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text-dim);
+      font-size: 13px;
+      font-family: var(--mono);
+      cursor: pointer;
+      transition: all 0.2s
+    }
+
+    .fbtn:hover {
+      background: var(--glass-hover);
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.14)
+    }
+
+    .fbtn .fbi {
+      font-size: 18px;
+      flex-shrink: 0
+    }
+
+    .fbtn-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px
+    }
+
+    .fbtn.danger {
+      border-color: rgba(255, 59, 48, 0.2);
+      color: rgba(255, 120, 110, 0.8)
+    }
+
+    .fbtn.danger:hover {
+      background: rgba(255, 59, 48, 0.1)
+    }
+
+    /* ── RECENT TABLE ── */
+    .rtable-box {
+      border-radius: var(--radius);
+      border: 0.5px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      overflow: hidden
+    }
+
+    .rtable {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      font-family: var(--mono)
+    }
+
+    .rth {
+      text-align: left;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: 10px 14px 9px;
+      border-bottom: 0.5px solid var(--glass-border);
+      font-weight: 400;
+      white-space: nowrap
+    }
+
+    .rtrow {
+      transition: background 0.15s
+    }
+
+    .rtrow:hover td {
+      background: var(--surf2)
+    }
+
+    .rtd {
+      padding: 9px 14px;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+      vertical-align: middle
+    }
+
+    .rtrow:last-child .rtd {
+      border-bottom: none
+    }
+
+    .rtpage {
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+      width: 52px
+    }
+
+    .rtverses {
+      color: var(--text-dim)
+    }
+
+    .rtln {
+      color: var(--text-muted);
+      white-space: nowrap;
+      width: 40px
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="bg">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+    <div class="orb o4"></div>
+    <div class="orb o5"></div>
+    <div class="orb o6"></div>
+    <div class="orb o7"></div>
+    <div class="orb o8"></div>
+  </div>
+  <div class="grain"></div>
+
+  <!-- AYAH EDIT MODAL -->
+  <div class="ayah-edit-modal-backdrop" id="ayah-edit-modal">
+    <div class="ayah-edit-modal">
+      <div class="aem-title">Edit Entry</div>
+      <div class="aem-ref-display" id="aem-ref">—</div>
+      <div class="modal-label" style="margin-bottom:6px">Type</div>
+      <div class="aem-type-row">
+        <div class="aem-type-btn active-qiraat" id="aem-btn-qiraat" onclick="aemSetType('qiraat')">● Qiraat</div>
+        <div class="aem-type-btn" id="aem-btn-memory" onclick="aemSetType('memory')">○ Memory</div>
+      </div>
+      <div class="modal-label" style="margin-bottom:6px">Label / Reference</div>
+      <input class="aem-text-field" id="aem-text" type="text" placeholder="e.g. 19:1-33" />
+      <div class="aem-actions">
+        <button class="modal-cancel" onclick="closeAyahEditModal()">Cancel</button>
+        <button class="modal-delete" onclick="aemDelete()">Delete</button>
+        <button class="modal-save" style="flex:1" onclick="aemSave()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD AYAH MODAL -->
+  <div class="add-ayah-modal-backdrop" id="add-ayah-modal">
+    <div class="add-ayah-modal">
+      <div class="aam-title">Add Verse(s)</div>
+      <div class="aam-hint">Format examples: <span style="color:var(--text-dim)">2:1-6</span> · <span style="color:var(--text-dim)">2:255</span> · <span style="color:var(--text-dim)">1</span> · <span style="color:var(--text-dim)">108-114</span> · <span style="color:var(--text-dim)">19:1-33</span> · <span style="color:var(--text-dim)">2:284-3:20</span></div>
+      <input class="aam-input" id="aam-input" type="text" placeholder="e.g. 19:1-33 or 108-114"
+        onkeydown="if(event.key==='Enter')submitAddAyah()" />
+      <div class="aam-error" id="aam-error"></div>
+      <div class="aam-loading" id="aam-loading"></div>
+      <div class="aam-actions">
+        <button class="modal-cancel" onclick="closeAddAyahModal()">Cancel</button>
+        <button class="modal-save" style="flex:1" onclick="submitAddAyah()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal">
+      <div class="modal-title" id="modal-title">Add Page</div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <div class="modal-label">Page #</div>
+          <input class="modal-input" id="m-page" type="number" placeholder="e.g. 306" />
+        </div>
+        <div class="modal-field">
+          <div class="modal-label">Lines (* = Full/15)</div>
+          <input class="modal-input" id="m-ln" type="text" placeholder="* or 9" />
+        </div>
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Name / Verses</div>
+        <input class="modal-input" id="m-verses" type="text" placeholder="e.g. 19:34–50 or Al-Kahf (18)" />
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <div class="modal-label">In prayer?</div>
+          <select class="modal-input" id="m-done">
+            <option value="false">No</option>
+            <option value="true">Yes (@)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label">Next up?</div>
+          <select class="modal-input" id="m-next">
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-note" id="m-note"></div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-delete" id="m-del" style="display:none" onclick="deleteFromModal()">Delete</button>
+        <button class="modal-save" onclick="saveModal()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="app">
+    <!-- TOPBAR -->
+    <div id="topbar">
+      <div class="logo">
+        <div class="logo-title">ح<span class="logo-accent">ف</span>ظ</div>
+        <div class="logo-sub">Hifz Tracker</div>
+      </div>
+      <div class="topbar-right">
+        <span class="file-status" id="file-status"><span class="dot-unsaved"></span>no file</span>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div id="tabs">
+      <div class="tab active" onclick="switchTab('plan')">Plan</div>
+      <div class="tab" onclick="switchTab('review')">Review</div>
+      <div class="tab" onclick="switchTab('fawatih')">Fawatih</div>
+      <div class="tab" onclick="switchTab('file')">File</div>
+    </div>
+
+    <div id="content">
+
+      <!-- PLAN -->
+      <div class="section active" id="sec-plan">
+        <div class="plan-grid">
+          <div class="plan-box">
+            <div class="plan-box-title">Known Ayat</div>
+            <div class="add-ayah-row">
+              <input class="ginput" id="ayah-search-in" placeholder="🔍 Search known ayat…"
+                style="flex:1;font-size:12px;padding:7px 12px" oninput="filterAyahList()" />
+              <button class="btn primary" onclick="openAddAyahModal()" title="Add verses">+</button>
+            </div>
+            <div class="plan-steps" id="known-ayat-list"></div>
+          </div>
+          <div class="plan-box">
+            <div class="plan-box-title">Memorization Roadmap</div>
+            <div class="plan-steps" id="plan-steps-list"></div>
+            <div class="add-ayah-row" style="margin-top:10px">
+              <input class="ginput" id="add-step-in" placeholder="Add roadmap step…"
+                style="flex:1;font-size:12px;padding:7px 12px" onkeydown="if(event.key==='Enter')addStep()" />
+              <button class="btn primary" onclick="addStep()">+</button>
+            </div>
+          </div>
+          <div class="plan-box">
+            <div class="plan-box-title">How to Memorize</div>
+            <div class="memorize-steps">
+              <div class="mem-phase">
+                <div class="mem-phase-title">Passive</div>
+                <div class="mem-step">Listen to the next group (2–10 ayahs) on loop, <b>changing start/end ayah</b> to
+                  avoid anchored wrong memory</div>
+              </div>
+              <div class="mem-phase">
+                <div class="mem-phase-title">Active — once you know the full tune</div>
+                <div class="mem-step"><b>1.</b> Listen to next 2 ayahs 10× while looking at verse number (split long
+                  ayahs at stopping points)</div>
+                <div class="mem-step"><b>2a.</b> Read verse 5–25× until smooth</div>
+                <div class="mem-step"><b>2b.</b> Recite along 5–25×</div>
+                <div class="mem-step"><b>2c.</b> Recite on Tarteel and note mistakes/hesitations</div>
+                <div class="mem-step"><b>3.</b> Repeat for pair: 1+2, then 2+3, then 3+4…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REVIEW -->
+      <div class="section" id="sec-review">
+        <div class="sec-label" style="margin-bottom:10px">Last 10 pages memorized</div>
+        <div id="recent-grid" style="margin-bottom:20px"></div>
+
+        <div
+          style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+          <div class="sec-label" style="margin-bottom:0">All pages memorized</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <input class="ginput" id="rev-search" style="width:150px;padding:7px 12px;font-size:12px" type="text"
+              placeholder="Search…" oninput="renderReview()" />
+            <div class="gselect-wrap" id="rev-filter-wrap">
+              <div class="gselect-btn" id="rev-filter-btn" onclick="toggleSel('rev-filter-wrap')"
+                style="min-width:110px;padding:7px 12px;font-size:12px">
+                <span id="rev-filter-lbl">All</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </div>
+              <div class="gselect-dropdown" id="rev-filter-dd">
+                <div class="gselect-opt selected" onclick="setRevFilter('all','All')">All</div>
+                <div class="gselect-opt" onclick="setRevFilter('done','In prayer')">In prayer</div>
+                <div class="gselect-opt" onclick="setRevFilter('notdone','Not in prayer')">Not in prayer</div>
+                <div class="gselect-opt" onclick="setRevFilter('pending','Pending')">Pending</div>
+                <div class="gselect-opt" onclick="setRevFilter('next','Next up')">Next up</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="page-grid" id="review-grid"></div>
+        <div class="reset-bar" id="review-reset"></div>
+      </div>
+
+      <!-- FAWATIH -->
+      <div class="section" id="sec-fawatih">
+        <div class="fawatih-controls">
+          <button class="btn" onclick="shuffleDeck()">⇄ Shuffle</button>
+          <button class="btn" onclick="fMode='all';initDeck()">All 114</button>
+          <button class="btn" onclick="fMode='known';initDeck()">Known beginnings</button>
+          <button class="btn" onclick="resetScore()">↺ Reset score</button>
+        </div>
+        <div class="card-deck">
+          <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="fc-face fc-front">
+              <div class="fc-num" id="fc-num">—</div>
+              <div class="fc-hint">click to reveal</div>
+            </div>
+            <div class="fc-face fc-back">
+              <div class="fc-surah-name" id="fc-name">—</div>
+              <div class="fc-arabic" id="fc-arabic">—</div>
+              <div class="fc-opening" id="fc-opening">—</div>
+              <div class="fc-hint">click to flip back</div>
+            </div>
+          </div>
+        </div>
+        <div class="fc-nav">
+          <button class="btn" onclick="prevCard()">← prev</button>
+          <button class="btn" style="border-color:rgba(255,59,48,0.3);color:rgba(255,110,100,0.9)"
+            onclick="markUnknown()">✗ don't know</button>
+          <button class="btn" style="border-color:rgba(74,222,128,0.3);color:#4ade80" onclick="markKnown()">✓ know
+            it</button>
+          <button class="btn" onclick="nextCard()">next →</button>
+        </div>
+        <div class="fc-score">
+          <div class="fc-score-inner">
+            <span class="score-known" id="score-known">✓ 0</span>
+            <span style="color:var(--text-muted);font-family:var(--mono);font-size:12px">/</span>
+            <span class="score-unknown" id="score-unknown">✗ 0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILE -->
+      <div class="section" id="sec-file">
+        <div class="file-section">
+          <div class="file-status-box">
+            <div class="fs-label">Sync status</div>
+            <div class="fs-val" id="fs-val"><span class="dot-unsaved"></span>not synced</div>
+          </div>
+          <div class="file-status-box" style="display:flex;flex-direction:column;gap:10px">
+            <div class="fs-label">n:point Bin ID</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input class="ginput" id="np-bin-input" placeholder="e.g. abc123def456"
+                style="flex:1;font-family:var(--mono);font-size:13px" onkeydown="if(event.key==='Enter')setNpBin()" />
+              <button class="btn primary" onclick="setNpBin()">Connect</button>
+            </div>
+            <div id="np-bin-display"
+              style="font-size:11px;font-family:var(--mono);color:var(--text-muted);word-break:break-all"></div>
+          </div>
+          <button class="fbtn" onclick="forcePush()"><span class="fbi">☁</span>
+            <div>
+              <div>Push to Cloud</div>
+              <div class="fbtn-sub">Force save current data to n:point</div>
+            </div>
+          </button>
+          <button class="fbtn" onclick="forcePull()"><span class="fbi">⬇</span>
+            <div>
+              <div>Pull from Cloud</div>
+              <div class="fbtn-sub">Overwrite local with n:point data</div>
+            </div>
+          </button>
+          <button class="fbtn" onclick="exportFallback()"><span class="fbi">💾</span>
+            <div>
+              <div>Download JSON</div>
+              <div class="fbtn-sub">Backup: download data as file</div>
+            </div>
+          </button>
+          <button class="fbtn danger" onclick="clearAll()"><span class="fbi">⚠</span>
+            <div>
+              <div>Clear All Data</div>
+              <div class="fbtn-sub">Reset everything to empty state</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /app -->
+
+  <script>
+    // ── DATA & PERSISTENCE ───────────────────────────────────────
+    const LS = 'hifz_v4';
+    const NP_BASE = 'https://api.npoint.io/';
+    const NP_BIN = 'YOUR_BIN_ID_HERE'; // paste your n:point bin ID here
+    const DEFAULT_D = {
+      pages: [],
+      recentQueue: [],
+      knownAyat: { qiraat: [], memory: [] },
+      plan: { upcoming: [] }
+    };
+    let D = JSON.parse(JSON.stringify(DEFAULT_D));
+    let dirty = false, syncing = false, saveTimer;
+    let npBin = localStorage.getItem('hifz_np_bin') || NP_BIN;
+
+    function loadLS() {
+      const s = localStorage.getItem(LS);
+      if (s) { try { const p = JSON.parse(s); D = Object.assign(JSON.parse(JSON.stringify(DEFAULT_D)), p); if (!D.recentQueue) D.recentQueue = []; } catch (e) { } }
+    }
+    function persist() {
+      dirty = true; updateStatus();
+      localStorage.setItem(LS, JSON.stringify(D));
+      if (npBin) { clearTimeout(saveTimer); saveTimer = setTimeout(npPush, 900); }
+    }
+    async function npPush() {
+      if (!npBin || syncing) return;
+      syncing = true; updateStatus();
+      try {
+        const r = await fetch(NP_BASE + npBin, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(D) });
+        if (r.ok) { dirty = false; } else { console.warn('npoint push failed', r.status); }
+      } catch (e) { console.warn('npoint push error', e); }
+      syncing = false; updateStatus();
+    }
+    async function npPull() {
+      if (!npBin) return false;
+      try {
+        const r = await fetch(NP_BASE + npBin);
+        if (!r.ok) return false;
+        const remote = await r.json();
+        if (typeof remote === 'object' && remote !== null && ('pages' in remote || 'knownAyat' in remote)) {
+          D = Object.assign(JSON.parse(JSON.stringify(DEFAULT_D)), remote);
+          if (!D.recentQueue) D.recentQueue = [];
+          localStorage.setItem(LS, JSON.stringify(D));
+          dirty = false; updateStatus(); renderAll(); initDeck();
+          return true;
+        }
+        return false;
+      } catch (e) { console.warn('npoint pull error', e); return false; }
+    }
+    function updateStatus() {
+      const el = document.getElementById('file-status');
+      const fsv = document.getElementById('fs-val');
+      const nbd = document.getElementById('np-bin-display');
+      const inp = document.getElementById('np-bin-input');
+      let label, dot;
+      if (!npBin) { label = 'no bin'; dot = '<span class="dot-unsaved"></span>'; }
+      else if (syncing) { label = 'syncing…'; dot = '<span class="dot-unsaved"></span>'; }
+      else if (dirty) { label = 'unsaved'; dot = '<span class="dot-unsaved"></span>'; }
+      else { label = 'synced'; dot = '<span class="dot-saved"></span>'; }
+      if (el) el.innerHTML = dot + label;
+      if (fsv) fsv.innerHTML = dot + label;
+      if (nbd) nbd.textContent = npBin ? NP_BASE + npBin : 'no bin set';
+      if (inp && npBin && !inp.value) inp.value = npBin;
+    }
+    function setNpBin() {
+      const val = (document.getElementById('np-bin-input').value || '').trim();
+      if (!val) { alert('Enter a bin ID.'); return; }
+      npBin = val;
+      localStorage.setItem('hifz_np_bin', npBin);
+      updateStatus();
+      npPull().then(ok => { if (!ok) alert('Connected — bin empty or no valid hifz data yet. Data will push on next change.'); });
+    }
+    async function forcePush() {
+      if (!npBin) { alert('No bin connected. Go to File tab.'); return; }
+      await npPush(); alert(dirty ? 'Push may have failed — check console.' : 'Pushed successfully.');
+    }
+    async function forcePull() {
+      if (!npBin) { alert('No bin connected.'); return; }
+      const ok = await npPull(); alert(ok ? 'Pulled successfully.' : 'Pull failed or no valid data in bin.');
+    }
+    function exportFallback() { const a = document.createElement('a'); a.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(D, null, 2)); a.download = 'hifz.json'; a.click(); }
+    function clearAll() { if (!confirm('Clear ALL data?')) return; D = JSON.parse(JSON.stringify(DEFAULT_D)); persist(); renderAll(); }
+
+    // ── RANDOM BG START POSITIONS ─────────────────────────────────
+    function initOrbs() {
+      const names = ['ob1', 'ob2', 'ob3', 'ob4', 'ob5', 'ob6', 'ob7', 'ob8'];
+      const durs = [18, 23, 20, 16, 14, 25, 19, 28];
+      document.querySelectorAll('.orb').forEach((o, i) => {
+        const delay = (-(Math.random() * durs[i])).toFixed(1);
+        const bx = (Math.random() * 80).toFixed(0);
+        const by = (Math.random() * 80).toFixed(0);
+        o.style.left = bx + '%';
+        o.style.top = by + '%';
+        o.style.animation = `${names[i]} ${durs[i]}s ease-in-out ${delay}s infinite`;
+      });
+    }
+
+    // ── TABS ─────────────────────────────────────────────────────
+    function switchTab(id) {
+      document.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', ['plan', 'review', 'fawatih', 'file'][i] === id);
+      });
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('sec-' + id).classList.add('active');
+      if (id === 'review') renderReview();
+      if (id === 'plan') renderPlan();
+    }
+
+    // ── GLASS SELECT ─────────────────────────────────────────────
+    let revFilterVal = 'all';
+    function toggleSel(wid) {
+      const w = document.getElementById(wid);
+      const dd = w.querySelector('.gselect-dropdown'), btn = w.querySelector('.gselect-btn');
+      const was = dd.classList.contains('open');
+      document.querySelectorAll('.gselect-dropdown').forEach(d => d.classList.remove('open'));
+      document.querySelectorAll('.gselect-btn').forEach(b => b.classList.remove('open'));
+      if (!was) { dd.classList.add('open'); btn.classList.add('open'); }
+    }
+    function setRevFilter(val, label) {
+      revFilterVal = val; document.getElementById('rev-filter-lbl').textContent = label;
+      document.querySelectorAll('#rev-filter-dd .gselect-opt').forEach(o => o.classList.toggle('selected', o.textContent.trim() === label));
+      closeAllSels(); renderReview();
+    }
+    function closeAllSels() { document.querySelectorAll('.gselect-dropdown').forEach(d => d.classList.remove('open')); document.querySelectorAll('.gselect-btn').forEach(b => b.classList.remove('open')); }
+    document.addEventListener('click', e => { if (!e.target.closest('.gselect-wrap')) closeAllSels(); });
+
+    // ── MODAL ────────────────────────────────────────────────────
+    let modalEditPage = null;
+    function openModal(editPage) {
+      modalEditPage = editPage;
+      const isEdit = editPage !== null;
+      document.getElementById('modal-title').textContent = isEdit ? 'Edit Page' : 'Add Page';
+      document.getElementById('m-del').style.display = isEdit ? '' : 'none';
+      document.getElementById('m-note').style.display = 'none';
+      if (isEdit) {
+        const p = D.pages.find(x => x.page === editPage);
+        if (p) { document.getElementById('m-page').value = p.page; document.getElementById('m-ln').value = p.ln; document.getElementById('m-verses').value = p.verses; document.getElementById('m-done').value = String(p.done); document.getElementById('m-next').value = String(p.next); }
+      } else { document.getElementById('m-page').value = ''; document.getElementById('m-ln').value = ''; document.getElementById('m-verses').value = ''; document.getElementById('m-done').value = 'false'; document.getElementById('m-next').value = 'false'; }
+      document.getElementById('modal').classList.add('open');
+      setTimeout(() => document.getElementById('m-page').focus(), 50);
+    }
+    function closeModal() { document.getElementById('modal').classList.remove('open'); modalEditPage = null; }
+    document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+
+    function saveModal() {
+      const pageNum = parseInt(document.getElementById('m-page').value);
+      const rawLn = document.getElementById('m-ln').value.trim().toLowerCase();
+      const ln = (!rawLn || rawLn === '*' || rawLn === '15' || rawLn === 'full') ? '*' : rawLn;
+      const verses = document.getElementById('m-verses').value.trim();
+      if (!pageNum || !verses) { alert('Page # and verses/name required.'); return; }
+      const done = document.getElementById('m-done').value === 'true';
+      const next = document.getElementById('m-next').value === 'true';
+      if (next) D.pages.forEach(p => p.next = false);
+      const note = document.getElementById('m-note');
+      if (modalEditPage === null) {
+        const ex = D.pages.findIndex(p => p.page === pageNum);
+        if (ex !== -1) { note.textContent = `Page ${pageNum} exists — updated.`; note.style.display = 'block'; D.pages[ex] = { page: pageNum, verses, ln, done, next }; }
+        else { D.pages.push({ page: pageNum, verses, ln, done, next }); D.pages.sort((a, b) => a.page - b.page); D.recentQueue = D.recentQueue.filter(n => n !== pageNum); D.recentQueue.push(pageNum); if (D.recentQueue.length > 10) D.recentQueue.shift(); }
+      } else {
+        const idx = D.pages.findIndex(p => p.page === modalEditPage);
+        if (idx !== -1) { D.pages[idx] = { page: pageNum, verses, ln, done, next }; if (pageNum !== modalEditPage) { D.recentQueue = D.recentQueue.map(n => n === modalEditPage ? pageNum : n); D.pages.sort((a, b) => a.page - b.page); } }
+      }
+      persist(); renderAll();
+      if (note.style.display === 'block') { setTimeout(closeModal, 900); } else { closeModal(); }
+    }
+    function deleteFromModal() {
+      if (!confirm(`Delete page ${modalEditPage}?`)) return;
+      D.pages = D.pages.filter(p => p.page !== modalEditPage);
+      D.recentQueue = D.recentQueue.filter(n => n !== modalEditPage);
+      persist(); renderAll(); closeModal();
+    }
+
+    // ── CARD RENDERING ───────────────────────────────────────────
+    function cardState(p) { if (p.done && p.next) return 'both'; if (p.done) return 'red'; if (p.next) return 'gold'; return ''; }
+    function lnDisplay(ln) { return ln === '*' ? 'Full Page' : ln + ' lines'; }
+
+    // each card gets unique breathe timing
+    const breatheParams = [];
+    function getBreath(idx) {
+      if (!breatheParams[idx]) breatheParams[idx] = { dur: (6 + Math.random() * 4).toFixed(1), del: (-(Math.random() * 6)).toFixed(1) };
+      return breatheParams[idx];
+    }
+
+    function makeCard(p, idx) {
+      const state = cardState(p);
+      const b = getBreath(idx);
+      return `<div class="pcard${state ? ' state-' + state : ''}" id="pc-${p.page}" style="--bd:${b.dur}s;--bdelay:${b.del}s">
+    <div class="pcard-top">
+      <span class="pnum">p.${p.page}</span>
+      <div class="pdots">
+        <div class="dot-gold${p.next ? ' on' : ''}" title="Next for review" onclick="toggleNext(event,${p.page})"></div>
+        ${p.page === 1 ? '' : `<div class="dot-red${p.done ? ' on' : ''}" title="Recited in prayer" onclick="toggleDone(event,${p.page})"></div>`}
+      </div>
+    </div>
+    <div class="pverses" onclick="window.open('https://quran.com/page/${String(p.page).padStart(3, '0')}','_blank')" style="cursor:pointer;text-decoration:none">${p.verses}</div>
+    <div class="pcard-bottom">
+      <span class="pln">${lnDisplay(p.ln)}</span>
+    </div>
+  </div>`;
+    }
+
+    function makeRecentTable(pages) {
+      if (!pages.length) return '<div style="color:var(--text-muted);font-family:var(--mono);font-size:12px;padding:8px">No pages yet.</div>';
+      const rows = pages.map((p) => {
+        return `<tr class="rtrow" onclick="window.open('https://quran.com/page/${String(p.page).padStart(3, '0')}','_blank')" style="cursor:pointer">
+      <td class="rtd rtpage">${p.page}</td>
+      <td class="rtd rtverses">${p.verses}</td>
+      <td class="rtd rtln">${p.ln === '*' ? 'full' : p.ln}</td>
+    </tr>`;
+      }).join('');
+      return `<div class="rtable-box"><table class="rtable">
+    <thead><tr>
+      <th class="rth">Page</th>
+      <th class="rth">Verses</th>
+      <th class="rth">Lines</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>`;
+    }
+
+    function toggleDone(e, pNum) {
+      e.stopPropagation();
+      const allDone = D.pages.length > 0 && D.pages.every(p => p.done);
+      if (allDone) { D.pages.forEach(p => p.done = false); }
+      else { const p = D.pages.find(x => x.page === pNum); if (p) p.done = !p.done; }
+      persist(); renderAll();
+    }
+    function toggleNext(e, pNum) {
+      e.stopPropagation();
+      const p = D.pages.find(x => x.page === pNum); if (!p) return;
+      const was = p.next; D.pages.forEach(x => x.next = false); if (!was) p.next = true;
+      persist(); renderAll();
+    }
+
+    // ── REVIEW ───────────────────────────────────────────────────
+    function renderRevPills() {
+      // pills removed per user request
+    }
+    function renderReview() {
+      renderRevPills();
+      // recent
+      const recentPages = [...D.recentQueue].reverse().map(n => D.pages.find(p => p.page === n)).filter(Boolean);
+      const rg = document.getElementById('recent-grid');
+      if (rg) rg.innerHTML = makeRecentTable(recentPages);
+      // all pages
+      const q = (document.getElementById('rev-search') || { value: '' }).value.toLowerCase();
+      const filtered = D.pages.filter(p => {
+        const mq = !q || p.verses.toLowerCase().includes(q) || String(p.page).includes(q);
+        const mf = revFilterVal === 'all' || (revFilterVal === 'done' && p.done) || (revFilterVal === 'notdone' && !p.done) || (revFilterVal === 'pending' && !p.done && !p.next) || (revFilterVal === 'next' && p.next);
+        return mq && mf;
+      });
+      const gridEl = document.getElementById('review-grid');
+      gridEl.innerHTML = filtered.length ? filtered.map((p, i) => makeCard(p, i)).join('') : '<div class="empty">No pages match.</div>';
+      if (filtered.length) {
+        gridEl.querySelectorAll('.pcard').forEach((c, i) => {
+          c.style.animationDelay = `${(i * 0.035).toFixed(2)}s`;
+          c.classList.add('anim-in');
+        });
+      }
+      // reset bar
+      const allDone = D.pages.length > 0 && D.pages.every(p => p.done);
+      const rb = document.getElementById('review-reset');
+      rb.textContent = allDone ? '// all pages done — tap any red dot to reset all' : '';
+      rb.className = 'reset-bar' + (allDone ? ' all-done' : '');
+    }
+
+    // ── PLAN ─────────────────────────────────────────────────────
+    let dragSrcIdx = null;
+
+    // --- Quran API helpers ---
+    let _surahMeta = null; // { id: verses_count }
+    async function getSurahMeta() {
+      if (_surahMeta) return _surahMeta;
+      try {
+        const r = await fetch('https://api.quran.com/api/v4/chapters?language=en');
+        const d = await r.json();
+        _surahMeta = {};
+        (d.chapters || []).forEach(c => { _surahMeta[c.id] = c.verses_count; });
+        return _surahMeta;
+      } catch(e) { return null; }
+    }
+
+    // Cache fetched page data to avoid redundant API calls
+    const _pageCache = {};
+
+    async function fetchPageData(pageNum) {
+      if (_pageCache[pageNum]) return _pageCache[pageNum];
+      try {
+        const r = await fetch(`https://api.quran.com/api/v4/verses/by_page/${pageNum}?words=true&per_page=50`);
+        const d = await r.json();
+        _pageCache[pageNum] = d.verses || [];
+        return _pageCache[pageNum];
+      } catch(e) { return []; }
+    }
+
+    // Given a list of {surah, ayah} verse objects, return array of page cards.
+    // verseLabel = full page content. ln = lines owned ≥75% by input verses.
+    async function buildPageCards(verses, rangeLabel, loadEl, fullPageLabel = false) {
+      if (loadEl) loadEl.textContent = 'Fetching page data…';
+
+      // Build a set of input verse keys for ownership calculation
+      const inputKeys = new Set(verses.map(v => `${v.surah}:${v.ayah}`));
+
+      // Step 1: find unique pages touched by input verses.
+      // Call by_key for the first verse of each page boundary; use the page's
+      // confirmed keyset to skip remaining verses on that same page.
+      const touchedPages = []; // ordered unique page numbers
+      let currentPageNum  = null;
+      let currentPageKeys = null;
+
+      for (const v of verses) {
+        const key = `${v.surah}:${v.ayah}`;
+        if (currentPageKeys && currentPageKeys.has(key)) continue;
+
+        if (loadEl) loadEl.textContent = `Fetching page for ${key}…`;
+        try {
+          const r  = await fetch(`https://api.quran.com/api/v4/verses/by_key/${key}?words=false&fields=page_number`);
+          const dj = await r.json();
+          const pg = dj.verse && dj.verse.page_number;
+          if (!pg) continue;
+          if (pg !== currentPageNum) {
+            currentPageNum  = pg;
+            const pv = await fetchPageData(pg);
+            currentPageKeys = new Set(pv.map(v => v.verse_key));
+            touchedPages.push(pg);
+          }
+        } catch(e) { continue; }
+      }
+
+      // Step 2: build card per page
+      const cards = [];
+      for (const pageNum of touchedPages) {
+        const pageVerses = await fetchPageData(pageNum);
+        if (!pageVerses.length) continue;
+
+        // verseLabel: full page when entering whole surahs, clipped to input range for verse ranges
+        let verseLabel;
+        if (fullPageLabel) {
+          const allPageVs = pageVerses.map(pv => { const [s,a] = pv.verse_key.split(':').map(Number); return {surah:s,ayah:a}; });
+          verseLabel = condenseVerseList(allPageVs);
+        } else {
+          const ownedPageVs = pageVerses
+            .filter(pv => inputKeys.has(pv.verse_key))
+            .map(pv => { const [s,a] = pv.verse_key.split(':').map(Number); return {surah:s,ayah:a}; });
+          verseLabel = condenseVerseList(ownedPageVs);
+        }
+
+        // ln: '*' if input covers the whole page, else 75%-ownership count
+        let ln = '*';
+        try {
+          const firstPageKey = pageVerses[0].verse_key;
+          const lastPageKey  = pageVerses[pageVerses.length - 1].verse_key;
+          const fullPage     = inputKeys.has(firstPageKey) && inputKeys.has(lastPageKey);
+
+          if (!fullPage) {
+            const lineTotals   = new Map();
+            const lineRangeOwn = new Map();
+            for (const pv of pageVerses) {
+              const inRange = inputKeys.has(pv.verse_key);
+              for (const w of (pv.words || [])) {
+                const lnum = w.line_number;
+                if (lnum == null) continue;
+                lineTotals.set(lnum, (lineTotals.get(lnum) || 0) + 1);
+                if (inRange) lineRangeOwn.set(lnum, (lineRangeOwn.get(lnum) || 0) + 1);
+              }
+            }
+            let ownedLines = 0;
+            for (const [lnum, total] of lineTotals) {
+              if ((lineRangeOwn.get(lnum) || 0) / total >= 0.75) ownedLines++;
+            }
+            ln = ownedLines > 0 ? String(ownedLines) : '*';
+          }
+        } catch(e) {}
+
+        cards.push({ page: pageNum, verseLabel, ln });
+      }
+
+      cards.sort((a, b) => a.page - b.page);
+      return cards;
+    }
+
+    // Condense [{surah,ayah}] → compact string like "19:1-33" or "2:255" or "18:110, 19:1-5"
+    function condenseVerseList(verses) {
+      if (!verses.length) return '';
+      const parts = [];
+      let i = 0;
+      while (i < verses.length) {
+        const start = verses[i];
+        let j = i;
+        // extend contiguous run (same surah, consecutive ayah)
+        while (j + 1 < verses.length &&
+               verses[j+1].surah === verses[j].surah &&
+               verses[j+1].ayah === verses[j].ayah + 1) j++;
+        const end = verses[j];
+        if (start.surah === end.surah) {
+          if (start.ayah === end.ayah) parts.push(`${start.surah}:${start.ayah}`);
+          else parts.push(`${start.surah}:${start.ayah}-${end.ayah}`);
+        } else {
+          parts.push(`${start.surah}:${start.ayah}-${end.surah}:${end.ayah}`);
+        }
+        i = j + 1;
+      }
+      return parts.join(', ');
+    }
+
+    // Parse verse range string → array of {surah, ayah} or error string
+    async function parseVerseRange(raw) {
+      const meta = await getSurahMeta();
+      if (!meta) return { err: 'Could not reach API. Check connection.' };
+      const str = raw.trim();
+      // patterns:
+      // "1" → whole surah 1
+      // "108-114" → surahs 108 to 114 (each whole)
+      // "2:255" → single ayah
+      // "2:1-6" → range within surah
+      // "2:284-3:20" → cross-surah range
+      // "19:1-33" → range within surah
+
+      let verses = []; // [{surah, ayah}]
+
+      // cross-surah: X:A-Y:B
+      const crossMatch = str.match(/^(\d+):(\d+)-(\d+):(\d+)$/);
+      if (crossMatch) {
+        const [,s1,a1,s2,a2] = crossMatch.map(Number);
+        if (!meta[s1] || !meta[s2]) return { err: `Surah ${!meta[s1]?s1:s2} not found.` };
+        if (a1 < 1 || a1 > meta[s1]) return { err: `${s1}:${a1} doesn't exist (max ${meta[s1]}).` };
+        if (a2 < 1 || a2 > meta[s2]) return { err: `${s2}:${a2} doesn't exist (max ${meta[s2]}).` };
+        // collect from s1:a1 to end of s1
+        for (let a = a1; a <= meta[s1]; a++) verses.push({surah:s1,ayah:a});
+        // whole surahs in between
+        for (let s = s1+1; s < s2; s++) for (let a = 1; a <= meta[s]; a++) verses.push({surah:s,ayah:a});
+        // start of s2 to a2
+        for (let a = 1; a <= a2; a++) verses.push({surah:s2,ayah:a});
+        return { verses, label: str };
+      }
+
+      // within-surah range: X:A-B
+      const rangeMatch = str.match(/^(\d+):(\d+)-(\d+)$/);
+      if (rangeMatch) {
+        const [,s,a1,a2] = rangeMatch.map(Number);
+        if (!meta[s]) return { err: `Surah ${s} not found.` };
+        if (a1 < 1 || a2 < a1 || a2 > meta[s]) return { err: `${s}:${a1}-${a2} is invalid (surah has ${meta[s]} ayat).` };
+        for (let a = a1; a <= a2; a++) verses.push({surah:s,ayah:a});
+        return { verses, label: str };
+      }
+
+      // single ayah: X:Y
+      const singleMatch = str.match(/^(\d+):(\d+)$/);
+      if (singleMatch) {
+        const [,s,a] = singleMatch.map(Number);
+        if (!meta[s]) return { err: `Surah ${s} not found.` };
+        if (a < 1 || a > meta[s]) return { err: `${s}:${a} doesn't exist (max ${meta[s]}).` };
+        verses.push({surah:s,ayah:a});
+        return { verses, label: str };
+      }
+
+      // surah range: A-B (whole surahs) → expand to individual surah entries
+      const surahRangeMatch = str.match(/^(\d+)-(\d+)$/);
+      if (surahRangeMatch) {
+        const [,s1,s2] = surahRangeMatch.map(Number);
+        if (!meta[s1]) return { err: `Surah ${s1} not found.` };
+        if (!meta[s2]) return { err: `Surah ${s2} not found.` };
+        if (s2 < s1) return { err: `${s1}-${s2}: end must be ≥ start.` };
+        const verses = [];
+        for (let s = s1; s <= s2; s++) for (let a = 1; a <= meta[s]; a++) verses.push({surah:s,ayah:a});
+        // Return individual surah labels so knownAyat gets one entry per surah
+        const surahLabels = [];
+        for (let s = s1; s <= s2; s++) surahLabels.push(String(s));
+        return { verses, label: str, surahLabels };
+      }
+
+      // single surah: X
+      const surahMatch = str.match(/^(\d+)$/);
+      if (surahMatch) {
+        const s = parseInt(surahMatch[1]);
+        if (!meta[s]) return { err: `Surah ${s} not found (valid: 1-114).` };
+        for (let a = 1; a <= meta[s]; a++) verses.push({surah:s,ayah:a});
+        return { verses, label: str };
+      }
+
+      return { err: `Can't parse "${str}". Use formats like: 2:255, 19:1-33, 108-114, 2:284-3:20` };
+    }
+
+    // --- Add Ayah Modal ---
+    function openAddAyahModal() {
+      document.getElementById('add-ayah-modal').classList.add('open');
+      document.getElementById('aam-input').value = '';
+      document.getElementById('aam-error').textContent = '';
+      document.getElementById('aam-loading').textContent = '';
+      setTimeout(() => document.getElementById('aam-input').focus(), 50);
+    }
+    function closeAddAyahModal() {
+      document.getElementById('add-ayah-modal').classList.remove('open');
+    }
+    document.getElementById('add-ayah-modal').addEventListener('click', e => {
+      if (e.target === document.getElementById('add-ayah-modal')) closeAddAyahModal();
+    });
+
+    async function submitAddAyah() {
+      const raw = document.getElementById('aam-input').value.trim();
+      if (!raw) return;
+      const errEl = document.getElementById('aam-error');
+      const loadEl = document.getElementById('aam-loading');
+      errEl.textContent = '';
+      loadEl.textContent = 'Validating…';
+
+      const result = await parseVerseRange(raw);
+      if (result.err) {
+        errEl.textContent = result.err;
+        loadEl.textContent = '';
+        return;
+      }
+
+      const { verses, label, surahLabels } = result;
+
+      // For surah ranges (e.g. 108-114): push one knownAyat entry per surah.
+      // For everything else: push a single entry with the raw label.
+      const labels = surahLabels || [label];
+      for (const l of labels) {
+        if (!D.knownAyat.qiraat.includes(l) && !D.knownAyat.memory.includes(l)) {
+          D.knownAyat.qiraat.push(l);
+        }
+      }
+
+      // Build review cards (one per page) — sourceLabel is the raw input label
+      // so deleting the individual surah entry only removes its own pages.
+      // We build cards from the full verse list but tag each card with the
+      // surah-level label it belongs to.
+      loadEl.textContent = 'Fetching page data…';
+
+      if (surahLabels) {
+        // Process each surah individually so sourceLabel matches the per-surah entry
+        for (const sl of surahLabels) {
+          const s = parseInt(sl);
+          const meta = await getSurahMeta();
+          const surahVerses = [];
+          for (let a = 1; a <= meta[s]; a++) surahVerses.push({ surah: s, ayah: a });
+          const cards = await buildPageCards(surahVerses, sl, loadEl, true);
+          for (const { page, verseLabel, ln } of cards) {
+            if (D.pages.findIndex(p => p.page === page) === -1) {
+              D.pages.push({ page, verses: verseLabel, ln, done: false, next: false, sourceLabel: sl });
+              D.recentQueue = D.recentQueue.filter(n => n !== page);
+              D.recentQueue.push(page);
+              if (D.recentQueue.length > 10) D.recentQueue.shift();
+            }
+          }
+        }
+      } else {
+        const cards = await buildPageCards(verses, label, loadEl);
+        for (const { page, verseLabel, ln } of cards) {
+          if (D.pages.findIndex(p => p.page === page) === -1) {
+            D.pages.push({ page, verses: verseLabel, ln, done: false, next: false, sourceLabel: label });
+            D.recentQueue = D.recentQueue.filter(n => n !== page);
+            D.recentQueue.push(page);
+            if (D.recentQueue.length > 10) D.recentQueue.shift();
+          }
+        }
+      }
+      D.pages.sort((a, b) => a.page - b.page);
+
+      persist(); renderAll(); initDeck();
+      loadEl.textContent = '';
+      closeAddAyahModal();
+    }
+
+    // --- Ayah Edit Modal ---
+    let _aemType = 'qiraat', _aemOrigType = 'qiraat', _aemIdx = -1;
+
+    function openAyahEditModal(type, idx) {
+      _aemType = type; _aemOrigType = type; _aemIdx = idx;
+      const val = D.knownAyat[type][idx];
+      document.getElementById('aem-ref').textContent = val;
+      document.getElementById('aem-text').value = val;
+      aemSetType(type);
+      document.getElementById('ayah-edit-modal').classList.add('open');
+      setTimeout(() => document.getElementById('aem-text').focus(), 50);
+    }
+    function closeAyahEditModal() {
+      document.getElementById('ayah-edit-modal').classList.remove('open');
+    }
+    document.getElementById('ayah-edit-modal').addEventListener('click', e => {
+      if (e.target === document.getElementById('ayah-edit-modal')) closeAyahEditModal();
+    });
+
+    function aemSetType(t) {
+      _aemType = t;
+      document.getElementById('aem-btn-qiraat').className = 'aem-type-btn' + (t === 'qiraat' ? ' active-qiraat' : '');
+      document.getElementById('aem-btn-memory').className = 'aem-type-btn' + (t === 'memory' ? ' active-memory' : '');
+    }
+
+    function aemSave() {
+      const newVal = document.getElementById('aem-text').value.trim();
+      if (!newVal) return;
+      // remove from original
+      D.knownAyat[_aemOrigType].splice(_aemIdx, 1);
+      // add to new type
+      D.knownAyat[_aemType].push(newVal);
+      persist(); renderAll(); initDeck();
+      closeAyahEditModal();
+    }
+
+    function aemDelete() {
+      if (!confirm('Delete this entry?')) return;
+      const label = D.knownAyat[_aemOrigType][_aemIdx];
+      D.knownAyat[_aemOrigType].splice(_aemIdx, 1);
+      D.pages = D.pages.filter(p => p.sourceLabel !== label);
+      D.recentQueue = D.recentQueue.filter(n => D.pages.some(p => p.page === n));
+      persist(); renderAll(); initDeck();
+      closeAyahEditModal();
+    }
+
+    function toggleAyahType(type, idx) {
+      const val = D.knownAyat[type][idx];
+      D.knownAyat[type].splice(idx, 1);
+      const newType = type === 'qiraat' ? 'memory' : 'qiraat';
+      D.knownAyat[newType].push(val);
+      persist(); renderAll(); initDeck();
+    }
+
+    let _ayahFilterQ = '';
+    function filterAyahList() {
+      _ayahFilterQ = document.getElementById('ayah-search-in').value.toLowerCase();
+      renderKnownAyat();
+    }
+
+    function labelSortKey(label) {
+      // Extract leading surah[:ayah] from labels like "19:1-33", "108-114", "2:255", "94"
+      const crossMatch = label.match(/^(\d+):(\d+)/);
+      if (crossMatch) return parseInt(crossMatch[1]) * 10000 + parseInt(crossMatch[2]);
+      const surahRange = label.match(/^(\d+)-/);
+      if (surahRange) return parseInt(surahRange[1]) * 10000 + 1;
+      const surahOnly = label.match(/^(\d+)$/);
+      if (surahOnly) return parseInt(surahOnly[1]) * 10000 + 1;
+      return 9999999;
+    }
+
+    function renderKnownAyat() {
+      const q = _ayahFilterQ;
+      // Build unified list with type+index preserved, then sort
+      const all = [];
+      D.knownAyat.qiraat.forEach((a, i) => all.push({ label: a, type: 'qiraat', idx: i }));
+      D.knownAyat.memory.forEach((a, i) => all.push({ label: a, type: 'memory', idx: i }));
+      all.sort((a, b) => labelSortKey(a.label) - labelSortKey(b.label));
+
+      let h = '';
+      all.forEach(({ label, type, idx }) => {
+        if (q && !label.toLowerCase().includes(q)) return;
+        const dotClass = type === 'qiraat' ? 'ayah-dot-qiraat' : 'ayah-dot-memory';
+        const dotTitle = type === 'qiraat' ? 'Qiraat — click to switch to Memory' : 'Memory — click to switch to Qiraat';
+        h += `<div class="ayah-item" onmousedown="if(event.shiftKey){event.preventDefault();openAyahEditModal('${type}',${idx});return false;}">
+          <span class="ayah-ref">${escHtml(label)}</span>
+          <span class="ayah-dot ${dotClass}" title="${dotTitle}" onclick="toggleAyahType('${type}',${idx})"></span>
+        </div>`;
+      });
+      document.getElementById('known-ayat-list').innerHTML = h ||
+        `<div style="color:var(--text-muted);font-size:12px;font-family:var(--mono);padding:4px 0">${q ? 'No matches.' : 'None yet'}</div>`;
+    }
+
+    function renderPlan() {
+      renderKnownAyat();
+      renderRoadmap();
+    }
+
+    function renderRoadmap() {
+      const list = document.getElementById('plan-steps-list');
+      list.innerHTML = D.plan.upcoming.map((s, i) => `
+    <div class="plan-step${i === 0 ? ' next-mem' : ''}" draggable="true"
+      data-idx="${i}"
+      ondragstart="rdragStart(event,${i})"
+      ondragover="rdragOver(event)"
+      ondrop="rdrop(event,${i})"
+      ondragend="rdragEnd()"
+    >
+      <span class="step-num">${i + 1}.</span>
+      <span class="step-text" ondblclick="editStep(${i},this)">${escHtml(s)}</span>
+      <span class="step-del" onclick="delStep(${i})" title="Delete">✕</span>
+      ${i === 0 ? '<span class="step-next-badge">← next</span>' : ''}
+    </div>`).join('');
+    }
+
+    function escHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    function editStep(idx, el) {
+      const cur = D.plan.upcoming[idx];
+      el.contentEditable = 'true';
+      el.classList.add('editing');
+      el.focus();
+      // move caret to end
+      const range = document.createRange(); range.selectNodeContents(el); range.collapse(false);
+      const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      function finish() {
+        el.contentEditable = 'false'; el.classList.remove('editing');
+        const val = el.textContent.trim();
+        if (val && val !== cur) { D.plan.upcoming[idx] = val; persist(); }
+        else { el.textContent = cur; }
+        el.removeEventListener('blur', finish); el.removeEventListener('keydown', onKey);
+      }
+      function onKey(e) {
+        if (e.key === 'Enter') { e.preventDefault(); finish(); }
+        if (e.key === 'Escape') { el.textContent = cur; el.contentEditable = 'false'; el.classList.remove('editing'); el.removeEventListener('blur', finish); el.removeEventListener('keydown', onKey); }
+      }
+      el.addEventListener('blur', finish); el.addEventListener('keydown', onKey);
+    }
+
+    function addStep() {
+      const inp = document.getElementById('add-step-in');
+      const val = inp.value.trim(); if (!val) return;
+      D.plan.upcoming.push(val); inp.value = ''; persist(); renderRoadmap();
+    }
+
+    function delStep(idx) {
+      D.plan.upcoming.splice(idx, 1); persist(); renderRoadmap();
+    }
+
+    // drag-to-reorder
+    function rdragStart(e, idx) { dragSrcIdx = idx; e.dataTransfer.effectAllowed = 'move'; e.currentTarget.style.opacity = '0.4'; }
+    function rdragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+    function rdrop(e, idx) {
+      e.preventDefault();
+      if (dragSrcIdx === null || dragSrcIdx === idx) return;
+      const moved = D.plan.upcoming.splice(dragSrcIdx, 1)[0];
+      D.plan.upcoming.splice(idx, 0, moved);
+      dragSrcIdx = null; persist(); renderRoadmap();
+    }
+    function rdragEnd() { dragSrcIdx = null; document.querySelectorAll('.plan-step').forEach(el => el.style.opacity = ''); }
+
+    function delAyah(type, idx) {
+      const label = D.knownAyat[type][idx];
+      D.knownAyat[type].splice(idx, 1);
+      D.pages = D.pages.filter(p => p.sourceLabel !== label);
+      D.recentQueue = D.recentQueue.filter(n => D.pages.some(p => p.page === n));
+      persist(); renderPlan(); initDeck();
+    }
+
+
+    function renderAll() { renderPlan(); renderReview(); }
+
+    // ── FAWATIH ──────────────────────────────────────────────────
+    const FAWATIH = [
+      { n: 1, name: "Al-Fatihah", arabic: "بِسْمِ ٱللَّهِ", opening: "Bismillah ir-Rahman ir-Raheem" },
+      { n: 2, name: "Al-Baqarah", arabic: "الٓمٓ", opening: "Alif Lam Meem — dhalika al-kitabu" },
+      { n: 3, name: "Ali 'Imran", arabic: "الٓمٓ", opening: "Alif Lam Meem — Allahu la ilaha illa Huwa" },
+      { n: 4, name: "An-Nisa", arabic: "يَٰٓأَيُّهَا ٱلنَّاسُ", opening: "Ya ayyuhan nasu ittaqu rabbakum" },
+      { n: 5, name: "Al-Ma'idah", arabic: "يَٰٓأَيُّهَا ٱلَّذِينَ", opening: "Ya ayyuhal ladhina amanu awfu bil-'uqud" },
+      { n: 6, name: "Al-An'am", arabic: "ٱلْحَمْدُ لِلَّهِ", opening: "Alhamdu lillahi alladhi khalaqa as-samawati" },
+      { n: 7, name: "Al-A'raf", arabic: "الٓمٓصٓ", opening: "Alif Lam Meem Sad — kitabun unzila ilayk" },
+      { n: 8, name: "Al-Anfal", arabic: "يَسْـَٔلُونَكَ", opening: "Yasalunaka 'anil anfal" },
+      { n: 9, name: "At-Tawbah", arabic: "بَرَآءَةٌ", opening: "Bara'atun minallahi wa rasulih" },
+      { n: 10, name: "Yunus", arabic: "الٓر", opening: "Alif Lam Ra — tilka ayatul kitabil hakeem" },
+      { n: 11, name: "Hud", arabic: "الٓر", opening: "Alif Lam Ra — kitabun uhkimat ayatuhu" },
+      { n: 12, name: "Yusuf", arabic: "الٓر", opening: "Alif Lam Ra — tilka ayatil kitabil mubeen" },
+      { n: 13, name: "Ar-Ra'd", arabic: "الٓمٓر", opening: "Alif Lam Meem Ra — tilka ayatul kitab" },
+      { n: 14, name: "Ibrahim", arabic: "الٓر", opening: "Alif Lam Ra — kitabun anzalnahu ilayk" },
+      { n: 15, name: "Al-Hijr", arabic: "الٓر", opening: "Alif Lam Ra — tilka ayatul kitab" },
+      { n: 16, name: "An-Nahl", arabic: "أَتَىٰٓ أَمْرُ", opening: "Ata amrullahi fala tasta'jiluh" },
+      { n: 17, name: "Al-Isra", arabic: "سُبْحَٰنَ", opening: "Subhanalladhi asra bi'abdihi laylan" },
+      { n: 18, name: "Al-Kahf", arabic: "ٱلْحَمْدُ لِلَّهِ", opening: "Alhamdu lillahi alladhi anzala 'ala abdihi" },
+      { n: 19, name: "Maryam", arabic: "كٓهيعٓصٓ", opening: "Kaf Ha Ya 'Ayn Sad — dhikru rahmati rabbik" },
+      { n: 20, name: "Ta-Ha", arabic: "طه", opening: "Ta Ha — ma anzalna 'alaykal Qur'ana" },
+      { n: 21, name: "Al-Anbiya", arabic: "ٱقْتَرَبَ", opening: "Iqtaraba linnasi hisabuhum" },
+      { n: 22, name: "Al-Hajj", arabic: "يَٰٓأَيُّهَا ٱلنَّاسُ", opening: "Ya ayyuhan nasu ittaqu rabbakum — inna zalzalata" },
+      { n: 23, name: "Al-Mu'minun", arabic: "قَدْ أَفْلَحَ", opening: "Qad aflaha al-mu'minun" },
+      { n: 24, name: "An-Nur", arabic: "سُورَةٌ", opening: "Suratun anzalnaha wa faradnaha" },
+      { n: 25, name: "Al-Furqan", arabic: "تَبَارَكَ", opening: "Tabarakalladhi nazzalal Furqan" },
+      { n: 26, name: "Ash-Shu'ara", arabic: "طسم", opening: "Ta Seen Meem — tilka ayatul kitab" },
+      { n: 27, name: "An-Naml", arabic: "طس", opening: "Ta Seen — tilka ayatul Qur'an" },
+      { n: 28, name: "Al-Qasas", arabic: "طسم", opening: "Ta Seen Meem — tilka ayatul kitab" },
+      { n: 29, name: "Al-'Ankabut", arabic: "الٓمٓ", opening: "Alif Lam Meem — ahasibannasu" },
+      { n: 30, name: "Ar-Rum", arabic: "الٓمٓ", opening: "Alif Lam Meem — ghulibatir Rum" },
+      { n: 31, name: "Luqman", arabic: "الٓمٓ", opening: "Alif Lam Meem — tilka ayatul kitab" },
+      { n: 32, name: "As-Sajdah", arabic: "الٓمٓ", opening: "Alif Lam Meem — tanzilul kitab" },
+      { n: 33, name: "Al-Ahzab", arabic: "يَٰٓأَيُّهَا ٱلنَّبِىُّ", opening: "Ya ayyuhan nabiyyu ittaqillah" },
+      { n: 34, name: "Saba", arabic: "ٱلْحَمْدُ لِلَّهِ", opening: "Alhamdu lillahi alladhi lahu ma fis-samawati" },
+      { n: 35, name: "Fatir", arabic: "ٱلْحَمْدُ لِلَّهِ", opening: "Alhamdu lillahi fatiris-samawati" },
+      { n: 36, name: "Ya-Sin", arabic: "يٓسٓ", opening: "Ya Seen — wal-Qur'anil hakeem" },
+      { n: 37, name: "As-Saffat", arabic: "وَٱلصَّٰٓفَّٰتِ", opening: "Was-saffati saffan" },
+      { n: 38, name: "Sad", arabic: "صٓ", opening: "Sad — wal-Qur'ani dhidh-dhikr" },
+      { n: 39, name: "Az-Zumar", arabic: "تَنزِيلُ", opening: "Tanzilul kitabi minallahi" },
+      { n: 40, name: "Ghafir", arabic: "حم", opening: "Ha Meem — tanzilul kitabi minallahi" },
+      { n: 41, name: "Fussilat", arabic: "حم", opening: "Ha Meem — tanzilun minar Rahmanir Raheem" },
+      { n: 42, name: "Ash-Shura", arabic: "حمٓ عسق", opening: "Ha Meem 'Ayn Seen Qaf — kadhalika" },
+      { n: 43, name: "Az-Zukhruf", arabic: "حم", opening: "Ha Meem — wal-kitabil mubeen" },
+      { n: 44, name: "Ad-Dukhan", arabic: "حم", opening: "Ha Meem — wal-kitabil mubeen" },
+      { n: 45, name: "Al-Jathiyah", arabic: "حم", opening: "Ha Meem — tanzilul kitabi minallahi" },
+      { n: 46, name: "Al-Ahqaf", arabic: "حم", opening: "Ha Meem — tanzilul kitabi minallahi" },
+      { n: 47, name: "Muhammad", arabic: "ٱلَّذِينَ كَفَرُوا۟", opening: "Alladhina kafaru wa saddu 'an sabeelillah" },
+      { n: 48, name: "Al-Fath", arabic: "إِنَّا فَتَحْنَا", opening: "Inna fatahna laka fathan mubeena" },
+      { n: 49, name: "Al-Hujurat", arabic: "يَٰٓأَيُّهَا ٱلَّذِينَ", opening: "Ya ayyuhal ladhina amanu la tuqaddimu" },
+      { n: 50, name: "Qaf", arabic: "قٓ", opening: "Qaf — wal-Qur'anil majeed" },
+      { n: 51, name: "Adh-Dhariyat", arabic: "وَٱلذَّٰرِيَٰتِ", opening: "Wadh-dhariyati dharwan" },
+      { n: 52, name: "At-Tur", arabic: "وَٱلطُّورِ", opening: "Wat-turi wa kitabin mastur" },
+      { n: 53, name: "An-Najm", arabic: "وَٱلنَّجْمِ", opening: "Wan-najmi idha hawa" },
+      { n: 54, name: "Al-Qamar", arabic: "ٱقْتَرَبَتِ", opening: "Iqtarabatis-sa'atu wanshaqqal qamar" },
+      { n: 55, name: "Ar-Rahman", arabic: "ٱلرَّحْمَٰنُ", opening: "Ar-Rahman — 'allamal Qur'an" },
+      { n: 56, name: "Al-Waqi'ah", arabic: "إِذَا وَقَعَتِ", opening: "Idha waqa'atil waqi'ah" },
+      { n: 57, name: "Al-Hadid", arabic: "سَبَّحَ لِلَّهِ", opening: "Sabbaha lillahi ma fis-samawati" },
+      { n: 58, name: "Al-Mujadilah", arabic: "قَدْ سَمِعَ", opening: "Qad sami'Allahu qawlal lati tujadiluka" },
+      { n: 59, name: "Al-Hashr", arabic: "سَبَّحَ لِلَّهِ", opening: "Sabbaha lillahi ma fis-samawati" },
+      { n: 60, name: "Al-Mumtahanah", arabic: "يَٰٓأَيُّهَا ٱلَّذِينَ", opening: "Ya ayyuhal ladhina amanu la tattakhidhu" },
+      { n: 61, name: "As-Saff", arabic: "سَبَّحَ لِلَّهِ", opening: "Sabbaha lillahi ma fis-samawati" },
+      { n: 62, name: "Al-Jumu'ah", arabic: "يُسَبِّحُ لِلَّهِ", opening: "Yusabbihu lillahi ma fis-samawati" },
+      { n: 63, name: "Al-Munafiqun", arabic: "إِذَا جَآءَكَ", opening: "Idha ja'akal munafiqun" },
+      { n: 64, name: "At-Taghabun", arabic: "يُسَبِّحُ لِلَّهِ", opening: "Yusabbihu lillahi ma fis-samawati" },
+      { n: 65, name: "At-Talaq", arabic: "يَٰٓأَيُّهَا ٱلنَّبِىُّ", opening: "Ya ayyuhan nabiyyu idha tallaqtum" },
+      { n: 66, name: "At-Tahrim", arabic: "يَٰٓأَيُّهَا ٱلنَّبِىُّ", opening: "Ya ayyuhan nabiyyu lima tuharrimu" },
+      { n: 67, name: "Al-Mulk", arabic: "تَبَٰرَكَ", opening: "Tabarakalladhi biyadihil mulk" },
+      { n: 68, name: "Al-Qalam", arabic: "نٓ", opening: "Noon — wal-qalami wa ma yasturun" },
+      { n: 69, name: "Al-Haqqah", arabic: "ٱلْحَآقَّةُ", opening: "Al-haqqah — mal-haqqah" },
+      { n: 70, name: "Al-Ma'arij", arabic: "سَأَلَ سَآئِلٌ", opening: "Sa'ala sa'ilun bi'adhabin waqi'" },
+      { n: 71, name: "Nuh", arabic: "إِنَّآ أَرْسَلْنَا", opening: "Inna arsalna Nuhan ila qawmihi" },
+      { n: 72, name: "Al-Jinn", arabic: "قُلْ أُوحِىَ", opening: "Qul oohiya ilayya annahu istama'a" },
+      { n: 73, name: "Al-Muzzammil", arabic: "يَٰٓأَيُّهَا ٱلْمُزَّمِّلُ", opening: "Ya ayyuhal muzzammil" },
+      { n: 74, name: "Al-Muddaththir", arabic: "يَٰٓأَيُّهَا ٱلْمُدَّثِّرُ", opening: "Ya ayyuhal muddaththir" },
+      { n: 75, name: "Al-Qiyamah", arabic: "لَآ أُقْسِمُ", opening: "La uqsimu biyawmil qiyamah" },
+      { n: 76, name: "Al-Insan", arabic: "هَلْ أَتَىٰ", opening: "Hal ata 'alal insani heenun" },
+      { n: 77, name: "Al-Mursalat", arabic: "وَٱلْمُرْسَلَٰتِ", opening: "Wal-mursalati 'urfan" },
+      { n: 78, name: "An-Naba", arabic: "عَمَّ", opening: "'Amma yatasa'alun" },
+      { n: 79, name: "An-Nazi'at", arabic: "وَٱلنَّٰزِعَٰتِ", opening: "Wan-nazi'ati gharqa" },
+      { n: 80, name: "'Abasa", arabic: "عَبَسَ", opening: "'Abasa wa tawalla" },
+      { n: 81, name: "At-Takwir", arabic: "إِذَا ٱلشَّمْسُ", opening: "Idhash-shamsu kuwwirat" },
+      { n: 82, name: "Al-Infitar", arabic: "إِذَا ٱلسَّمَآءُ", opening: "Idhas-sama'un fatarat" },
+      { n: 83, name: "Al-Mutaffifin", arabic: "وَيْلٌ لِّلْمُطَفِّفِينَ", opening: "Waylul lil-mutaffifin" },
+      { n: 84, name: "Al-Inshiqaq", arabic: "إِذَا ٱلسَّمَآءُ", opening: "Idhas-sama'un inshaqqat" },
+      { n: 85, name: "Al-Buruj", arabic: "وَٱلسَّمَآءِ", opening: "Was-sama'i dhatil buruj" },
+      { n: 86, name: "At-Tariq", arabic: "وَٱلسَّمَآءِ", opening: "Was-sama'i wat-tariq" },
+      { n: 87, name: "Al-A'la", arabic: "سَبِّحِ", opening: "Sabbihisma rabbikal a'la" },
+      { n: 88, name: "Al-Ghashiyah", arabic: "هَلْ أَتَىٰكَ", opening: "Hal ataka hadithul ghashiyah" },
+      { n: 89, name: "Al-Fajr", arabic: "وَٱلْفَجْرِ", opening: "Wal-fajr wa layalin 'ashr" },
+      { n: 90, name: "Al-Balad", arabic: "لَآ أُقْسِمُ", opening: "La uqsimu bihadhal balad" },
+      { n: 91, name: "Ash-Shams", arabic: "وَٱلشَّمْسِ", opening: "Wash-shamsi wa duhaha" },
+      { n: 92, name: "Al-Layl", arabic: "وَٱللَّيْلِ", opening: "Wal-layli idha yaghsha" },
+      { n: 93, name: "Ad-Duha", arabic: "وَٱلضُّحَىٰ", opening: "Wad-duha — wal-layli idha saja" },
+      { n: 94, name: "Ash-Sharh", arabic: "أَلَمْ نَشْرَحْ", opening: "Alam nashrah laka sadrak" },
+      { n: 95, name: "At-Tin", arabic: "وَٱلتِّينِ", opening: "Wat-teeni waz-zaytoon" },
+      { n: 96, name: "Al-'Alaq", arabic: "ٱقْرَأْ", opening: "Iqra' bismi rabbikal ladhi khalaq" },
+      { n: 97, name: "Al-Qadr", arabic: "إِنَّآ أَنزَلْنَٰهُ", opening: "Inna anzalnahu fee laylatil qadr" },
+      { n: 98, name: "Al-Bayyinah", arabic: "لَمْ يَكُنِ", opening: "Lam yakunil ladhina kafaru" },
+      { n: 99, name: "Az-Zalzalah", arabic: "إِذَا زُلْزِلَتِ", opening: "Idha zulzilatil ardu zilzalaha" },
+      { n: 100, name: "Al-'Adiyat", arabic: "وَٱلْعَٰدِيَٰتِ", opening: "Wal-'adiyati dhabha" },
+      { n: 101, name: "Al-Qari'ah", arabic: "ٱلْقَارِعَةُ", opening: "Al-qari'ah — mal-qari'ah" },
+      { n: 102, name: "At-Takathur", arabic: "أَلْهَىٰكُمُ", opening: "Alhakumut-takathur" },
+      { n: 103, name: "Al-'Asr", arabic: "وَٱلْعَصْرِ", opening: "Wal-'asr — innal insana" },
+      { n: 104, name: "Al-Humazah", arabic: "وَيْلٌ لِّكُلِّ", opening: "Waylul likulli humazatin lumazah" },
+      { n: 105, name: "Al-Fil", arabic: "أَلَمْ تَرَ", opening: "Alam tara kayfa fa'ala rabbuka" },
+      { n: 106, name: "Quraysh", arabic: "لِإِيلَٰفِ", opening: "Li-ilafi Quraysh" },
+      { n: 107, name: "Al-Ma'un", arabic: "أَرَءَيْتَ", opening: "Ara'aytal ladhi yukadhdhibu" },
+      { n: 108, name: "Al-Kawthar", arabic: "إِنَّآ أَعْطَيْنَٰكَ", opening: "Inna a'taynaka al-kawthar" },
+      { n: 109, name: "Al-Kafirun", arabic: "قُلْ يَٰٓأَيُّهَا", opening: "Qul ya ayyuhal kafirun" },
+      { n: 110, name: "An-Nasr", arabic: "إِذَا جَآءَ", opening: "Idha ja'a nasrullahi wal-fath" },
+      { n: 111, name: "Al-Masad", arabic: "تَبَّتْ", opening: "Tabbat yada abi lahabin" },
+      { n: 112, name: "Al-Ikhlas", arabic: "قُلْ هُوَ ٱللَّهُ", opening: "Qul huwa Allahu ahad" },
+      { n: 113, name: "Al-Falaq", arabic: "قُلْ أَعُوذُ", opening: "Qul a'udhu birabbil falaq" },
+      { n: 114, name: "An-Nas", arabic: "قُلْ أَعُوذُ", opening: "Qul a'udhu birabbin nas" }
+    ];
+    function getKnownSurahSet() {
+      const base = new Set([1, 2, 19, 93, 95, 97, 103, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114]);
+      const all = [...D.knownAyat.qiraat, ...D.knownAyat.memory];
+      all.forEach(label => {
+        // Extract all surah numbers: patterns like "2:255", "19:1-33", "108-114", "2:284-3:20", "94"
+        // Cross-surah: X:A-Y:B
+        const cross = label.match(/^(\d+):\d+-(\d+):\d+$/);
+        if (cross) { const s1=parseInt(cross[1]),s2=parseInt(cross[2]); for(let s=s1;s<=s2;s++) base.add(s); return; }
+        // surah range: X-Y
+        const sRange = label.match(/^(\d+)-(\d+)$/);
+        if (sRange) { const s1=parseInt(sRange[1]),s2=parseInt(sRange[2]); if(s1<=114&&s2<=114) { for(let s=s1;s<=s2;s++) base.add(s); return; } }
+        // X:A or X:A-B → surah X
+        const withAyah = label.match(/^(\d+):/);
+        if (withAyah) { base.add(parseInt(withAyah[1])); return; }
+        // pure number → whole surah
+        const pure = label.match(/^(\d+)$/);
+        if (pure) { const n=parseInt(pure[1]); if(n>=1&&n<=114) base.add(n); }
+      });
+      return base;
+    }
+    let fawatihDeck = [], fawatihIdx = 0, fMode = 'all', fawatihKnown = 0, fawatihUnknown = 0;
+
+    function initDeck() {
+      fawatihDeck = fMode === 'known' ? FAWATIH.filter(f => getKnownSurahSet().has(f.n)) : [...FAWATIH];
+      fawatihIdx = 0; fawatihKnown = 0; fawatihUnknown = 0;
+      document.getElementById('flashcard').classList.remove('flipped');
+      updateFawatihCard();
+    }
+    function shuffleDeck() {
+      for (let i = fawatihDeck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[fawatihDeck[i], fawatihDeck[j]] = [fawatihDeck[j], fawatihDeck[i]]; }
+      fawatihIdx = 0; document.getElementById('flashcard').classList.remove('flipped'); updateFawatihCard();
+    }
+    function updateFawatihCard() {
+      if (!fawatihDeck.length) return;
+      const c = fawatihDeck[fawatihIdx];
+      const s = String(c.n);
+      document.getElementById('fc-num').innerHTML = s.slice(0, -1) + '<span class="accent">' + s.slice(-1) + '</span>';
+      document.getElementById('fc-name').textContent = c.name;
+      document.getElementById('fc-arabic').textContent = c.arabic;
+      document.getElementById('fc-opening').textContent = c.opening;
+      document.getElementById('score-known').textContent = `✓ ${fawatihKnown}`;
+      document.getElementById('score-unknown').textContent = `✗ ${fawatihUnknown}`;
+    }
+    function flipCard() { document.getElementById('flashcard').classList.toggle('flipped'); }
+    function nextCard() { document.getElementById('flashcard').classList.remove('flipped'); fawatihIdx = (fawatihIdx + 1) % fawatihDeck.length; setTimeout(updateFawatihCard, 150); }
+    function prevCard() { document.getElementById('flashcard').classList.remove('flipped'); fawatihIdx = (fawatihIdx - 1 + fawatihDeck.length) % fawatihDeck.length; setTimeout(updateFawatihCard, 150); }
+    function markKnown() { fawatihKnown++; nextCard(); }
+    function markUnknown() { fawatihUnknown++; nextCard(); }
+    function resetScore() { fawatihKnown = 0; fawatihUnknown = 0; updateFawatihCard(); }
+
+    // ── INIT ─────────────────────────────────────────────────────
+    loadLS();
+    initOrbs();
+    renderAll();
+    initDeck();
+    updateStatus();
+    if (npBin) { npPull(); }
+  </script>
+</body>
+
+</html>
